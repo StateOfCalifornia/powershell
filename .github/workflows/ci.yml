@@ -20,4 +20,4 @@ jobs:
     - name: look for ps1 file
       shell: powershell
       run: |
-       .\FrontDoorReport.ps1 -STORAGE_ACCOUNT_KEY ${{ secrets.STORAGE_ACCOUNT_KEY }} -STORAGE_ACCOUNT_NAME ${{ secrets.STORAGE_ACCOUNT_NAME }} -SUBSCRIPTION ${{ secrets.SUBSCRIPTION }}
+       .\CDNReport.ps1 -STORAGE_ACCOUNT_KEY ${{ secrets.STORAGE_ACCOUNT_KEY }} -STORAGE_ACCOUNT_NAME ${{ secrets.STORAGE_ACCOUNT_NAME }} -SUBSCRIPTION ${{ secrets.SUBSCRIPTION }}
