@@ -1,28 +1,23 @@
-on:
-  pull_request:
-    branches:
-      - master
-  push:
-    branches:
-      - master
+on: [push]
+
+name: AzurePowerShellSample
 
 jobs:
-  build_test_job:
-    name: 'Build and test job'
-    runs-on: ${{ matrix.os }}
-    strategy:
-        matrix:
-          os: [windows-latest, ubuntu-latest, macos-latest]
+
+  build:
+    runs-on: windows-latest
     steps:
-
-    - name: 'Checking out repo code'
-      uses: actions/checkout@v2
-
-    - name: 'Validate build'
-      run: |
-        npm install
-        npm run build
+    
+    - name: Login via Az module
+      uses: azure/login@v1.1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+        enable-AzPSSession: true 
         
-    - name: 'Run L0 tests'
+    - name: checkout repo
+      uses: actions/checkout@v1
+
+    - name: look for ps1 file
+      shell: powershell
       run: |
-        npm run test
+       .\CDNReport.ps1 -STORAGE_ACCOUNT_KEY ${{ secrets.STORAGE_ACCOUNT_KEY }} -STORAGE_ACCOUNT_NAME ${{ secrets.STORAGE_ACCOUNT_NAME }} -SUBSCRIPTION ${{ secrets.SUBSCRIPTION }}
