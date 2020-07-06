@@ -16,7 +16,7 @@
 param (
     $STORAGE_ACCOUNT_KEY,
     $STORAGE_ACCOUNT_NAME,
-    $SUBSCRIPTIONf
+    $SUBSCRIPTION
 )
 
 Install-Module -Name Az.FrontDoor -force
@@ -37,7 +37,7 @@ $contextFDHostNames = $contextFD.HostName
 foreach ($contextFDHostName in $contextFDHostNames)
 {   
     $OutputItem = New-Object Object
-    $OutputItem | Add-Member NoteProperty -Name  Subscription  -Value  $Subscription
+    $OutputItem | Add-Member NoteProperty -Name  Subscription  -Value  $SUBSCRIPTION
     $OutputItem | Add-Member NoteProperty -Name  ResourceGroup  -Value  $ResourceGroupNamev2[4]
     $OutputItem | Add-Member NoteProperty -Name  FrontDoorName  -Value  $count
     $OutputItem | Add-Member HostNames   $contextFDHostName
