@@ -14,12 +14,13 @@
 
 [CmdletBinding()]
 param (
-    $StorageAccountKey,
-    $StorageAccountName,
-    $Subscription,
-    $SubscriptionSlot
-
+    $STORAGE_ACCOUNT_KEY,
+    $STORAGE_ACCOUNT_NAME,
+    $SUBSCRIPTIONf
 )
+
+Install-Module -Name Az.FrontDoor -force
+Install-Module -Name Az.Storage -force -AllowClobber
 
 $GetResourcesFD = Get-AzFrontDoor
 $TotalCount = $GetResourcesFD.Name
@@ -29,7 +30,6 @@ foreach($count in $TotalCount)
 {
 $ResourceGroupNamev1 = $GetResourcesFD.Id
 $ResourceGroupNamev2 = $ResourceGroupNamev1[$RCount].Split("/")
-$ResourceGroupNamev2[4]
 $contextFD = Get-AzFrontDoorFrontendEndpoint -ResourceGroupName $ResourceGroupNamev2[4] -FrontDoorName $count
 $contextFDHostNames = $contextFD.HostName
 
@@ -110,10 +110,9 @@ $excel.Quit()
 
 Import-Csv ".\$FileNamev1" | ConvertTo-Html -Body "$Title" -Head $Header  -PostContent "<p id='CreationDate'>Creation Date: $(Get-Date)</p>" | Out-File $FileName
 
-$StorageContext = New-AzStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey
+$StorageContext = New-AzStorageContext -StorageAccountName $STORAGE_ACCOUNT_NAME -StorageAccountKey $STORAGE_ACCOUNT_KEY
 
 #$Container = Get-AzureStorageContainer -Name 'bootdiagnostics-vmansible-9d853815-ac86-42c5-a6d4-b7f05810c59f' -Context $StorageContext
-Set-AzStorageBlobContent -Container '$web' -File ".\$FileName" -Properties @{"ContentType" = "text/html"} -Context $StorageContext -Force
-
-Set-AzStorageBlobContent -Container '$web' -File ".\$FileNamev1" -Context $StorageContext -Force
+Set-AzStorageBlobContent -Container "powershellreports" -File ".\$FileName" -Properties @{"ContentType" = "text/html"} -Context $StorageContext -Force
+Set-AzStorageBlobContent -Container "powershellreports" -File ".\$FileNamev1" -Context $StorageContext -Force
 
